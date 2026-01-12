@@ -1,0 +1,88 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "{{ cookiecutter.distribution_name }}"
+version = "{{ cookiecutter.version }}"
+description = "{{ cookiecutter.description }}"
+readme = "README.md"
+requires-python = ">= {{ cookiecutter.python_version }}"
+license = { text = "MIT" }
+authors = [{ name = "{{ cookiecutter.author_name }}", email = "{{ cookiecutter.author_email }}" }]
+dependencies = [
+    "click>=8.0",
+    "Django>={{ cookiecutter.django_version }}",
+    "dj-database-url>=2.0",
+]
+
+[project.scripts]
+{{ cookiecutter.project_slug }}-manage = "{{ cookiecutter.package_name }}.manage_cli:main"
+{{ cookiecutter.project_slug }}-celery = "{{ cookiecutter.package_name }}.tasks.cli:main"
+{{ cookiecutter.project_slug }}-migrate = "{{ cookiecutter.package_name }}.migrate_cli:main"
+
+[project.optional-dependencies]
+server = ["gunicorn>=21.0", "uvicorn[standard]>=0.22"]
+tasks = ["celery>=5.3", "redis>=5.0"]
+dev = [
+    "black>=24.3",
+    "coverage[toml]>=7.4",
+    "django-stubs>=5.0",
+    "flake8>=7.0",
+    "mypy>=1.7",
+    "pytest>=7.4",
+    "pytest-cov>=4.1",
+    "pytest-django>=4.5",
+    "ruff>=0.1",
+    "tox>=4.11",
+]
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "{{ cookiecutter.package_name }}.server.settings"
+python_files = ["test_*.py"]
+testpaths = ["tests"]
+
+[tool.ruff]
+target-version = "py{{ cookiecutter.python_version|replace('.', '') }}"
+line-length = 88
+select = ["E", "F", "I", "B", "UP", "N", "W"]
+ignore = ["E501"]
+
+[tool.ruff.isort]
+known-first-party = ["{{ cookiecutter.package_name }}"]
+
+[tool.black]
+line-length = 88
+target-version = ["py{{ cookiecutter.python_version|replace('.', '') }}"]
+include = "\\.pyi?$"
+extend-exclude = "(^|/)(migrations|\\.venv|venv|build|dist)/"
+
+[tool.mypy]
+python_version = "{{ cookiecutter.python_version }}"
+warn_unused_configs = true
+warn_return_any = true
+disallow_untyped_defs = false
+plugins = ["mypy_django_plugin.main"]
+
+[tool.django-stubs]
+django_settings_module = "{{ cookiecutter.package_name }}.server.settings"
+
+[tool.coverage.run]
+branch = true
+source = ["{{ cookiecutter.package_name }}"]
+omit = ["*/migrations/*", "*/tests/*"]
+
+[tool.coverage.report]
+fail_under = 90
+show_missing = true
+skip_covered = false
+
+[[tool.mypy.overrides]]
+module = ["celery.*", "dj_database_url.*"]
+ignore_missing_imports = true

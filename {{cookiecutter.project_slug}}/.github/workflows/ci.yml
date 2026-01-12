@@ -1,0 +1,41 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  format:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "{{ cookiecutter.python_version }}"
+      - name: Install deps
+        run: |
+          python -m pip install -U pip
+          python -m pip install -e ".[dev]"
+      - name: Black check
+        run: make format-check
+
+  tox:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - python-version: "{{ cookiecutter.python_version }}"
+            tox-env: "py{{ cookiecutter.python_version|replace('.', '') }}"
+          - python-version: "3.13"
+            tox-env: "py313"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          {% raw %}python-version: ${{ matrix.python-version }}{% endraw %}
+      - name: Install tox
+        run: |
+          python -m pip install -U pip
+          python -m pip install tox
+      - name: Run tox
+        {% raw %}run: python -m tox -e ${{ matrix.tox-env }}{% endraw %}

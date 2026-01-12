@@ -1,0 +1,17 @@
+FROM python:{{ cookiecutter.python_version }}-slim AS builder
+WORKDIR /app
+ENV PIP_DISABLE_PIP_VERSION_CHECK=1 PIP_NO_CACHE_DIR=1
+COPY pyproject.toml README.md /app/
+COPY src /app/src
+RUN python -m pip install --upgrade pip && \
+    pip wheel --wheel-dir=/wheels ".[tasks]"
+
+FROM python:{{ cookiecutter.python_version }}-slim
+WORKDIR /app
+ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 DJANGO_SETTINGS_MODULE={{ cookiecutter.package_name }}.server.settings
+RUN useradd --create-home --uid 10001 appuser
+COPY --from=builder /wheels /wheels
+RUN python -m pip install --no-cache-dir --no-index --find-links=/wheels {{ cookiecutter.distribution_name }}[tasks] && \
+    rm -rf /wheels
+USER appuser
+CMD ["celery", "-A", "{{ cookiecutter.package_name }}.tasks.celery_app", "worker", "-l", "info"]
