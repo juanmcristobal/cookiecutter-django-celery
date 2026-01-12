@@ -1,8 +1,6 @@
 {
   "project_name": "Example Project",
-  "project_slug": "example-project",
-  "package_name": "example_project",
-  "distribution_name": "example-project-core",
+  "project_slug": "{{ cookiecutter.project_name | lower | replace(' ', '_') | replace('-', '_') }}",
   "version": "0.1.0",
   "description": "Minimal, production-minded Django + Celery backend with a single Python namespace.",
   "author_name": "Your Name",

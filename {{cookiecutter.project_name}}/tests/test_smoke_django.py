@@ -7,7 +7,7 @@ from django.test import Client
 def test_smoke_django():
     os.environ.setdefault(
         "DJANGO_SETTINGS_MODULE",
-        "{{ cookiecutter.package_name }}.server.settings",
+        "{{ cookiecutter.project_slug|replace('-', '_') }}.server.settings",
     )
     django.setup()
 

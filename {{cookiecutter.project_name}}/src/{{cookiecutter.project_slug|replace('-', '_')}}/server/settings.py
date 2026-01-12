@@ -46,7 +46,7 @@ INSTALLED_APPS = [
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.staticfiles",
-    "{{ cookiecutter.package_name }}.core",
+    "{{ cookiecutter.project_slug|replace('-', '_') }}.core",
 ]
 
 MIDDLEWARE = [
@@ -55,9 +55,9 @@ MIDDLEWARE = [
     "django.middleware.common.CommonMiddleware",
 ]
 
-ROOT_URLCONF = "{{ cookiecutter.package_name }}.server.urls"
-WSGI_APPLICATION = "{{ cookiecutter.package_name }}.server.wsgi.application"
-ASGI_APPLICATION = "{{ cookiecutter.package_name }}.server.asgi.application"
+ROOT_URLCONF = "{{ cookiecutter.project_slug|replace('-', '_') }}.server.urls"
+WSGI_APPLICATION = "{{ cookiecutter.project_slug|replace('-', '_') }}.server.wsgi.application"
+ASGI_APPLICATION = "{{ cookiecutter.project_slug|replace('-', '_') }}.server.asgi.application"
 
 TEMPLATES = [
     {
@@ -98,11 +98,11 @@ CELERY_BEAT_SCHEDULE_FILENAME = os.getenv(
 )
 CELERY_BEAT_SCHEDULE = {
     "ping-every-60s": {
-        "task": "{{ cookiecutter.package_name }}.core.tasks.ping",
+        "task": "{{ cookiecutter.project_slug|replace('-', '_') }}.core.tasks.ping",
         "schedule": float(os.getenv("CELERY_PING_INTERVAL_SECONDS", "60")),
     },
     "add-every-300s": {
-        "task": "{{ cookiecutter.package_name }}.core.tasks.add",
+        "task": "{{ cookiecutter.project_slug|replace('-', '_') }}.core.tasks.add",
         "schedule": float(os.getenv("CELERY_ADD_INTERVAL_SECONDS", "300")),
         "args": (2, 3),
     },

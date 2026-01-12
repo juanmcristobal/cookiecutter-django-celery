@@ -3,7 +3,7 @@ import sys
 
 
 def test_manage_cli_invokes_execute(monkeypatch):
-    from {{ cookiecutter.package_name }} import manage_cli
+    from {{ cookiecutter.project_slug|replace('-', '_') }} import manage_cli
 
     captured = {}
 
@@ -20,13 +20,13 @@ def test_manage_cli_invokes_execute(monkeypatch):
 
     assert (
         os.environ["DJANGO_SETTINGS_MODULE"]
-        == "{{ cookiecutter.package_name }}.server.settings"
+        == "{{ cookiecutter.project_slug|replace('-', '_') }}.server.settings"
     )
     assert captured["argv"] == ["{{ cookiecutter.project_slug }}-manage", "check"]
 
 
 def test_tasks_cli_injects_app(monkeypatch):
-    from {{ cookiecutter.package_name }}.tasks import cli
+    from {{ cookiecutter.project_slug|replace('-', '_') }}.tasks import cli
 
     captured = {}
 
@@ -45,12 +45,12 @@ def test_tasks_cli_injects_app(monkeypatch):
 
     assert (
         os.environ["DJANGO_SETTINGS_MODULE"]
-        == "{{ cookiecutter.package_name }}.server.settings"
+        == "{{ cookiecutter.project_slug|replace('-', '_') }}.server.settings"
     )
     assert captured["argv"] == [
         "celery",
         "-A",
-        "{{ cookiecutter.package_name }}.tasks.celery_app",
+        "{{ cookiecutter.project_slug|replace('-', '_') }}.tasks.celery_app",
         "worker",
         "-l",
         "info",
@@ -58,7 +58,7 @@ def test_tasks_cli_injects_app(monkeypatch):
 
 
 def test_tasks_cli_respects_app_arg(monkeypatch):
-    from {{ cookiecutter.package_name }}.tasks import cli
+    from {{ cookiecutter.project_slug|replace('-', '_') }}.tasks import cli
 
     captured = {}
 
@@ -80,10 +80,10 @@ def test_tasks_cli_respects_app_arg(monkeypatch):
 def test_wsgi_application():
     os.environ.setdefault(
         "DJANGO_SETTINGS_MODULE",
-        "{{ cookiecutter.package_name }}.server.settings",
+        "{{ cookiecutter.project_slug|replace('-', '_') }}.server.settings",
     )
 
-    from {{ cookiecutter.package_name }}.server import wsgi
+    from {{ cookiecutter.project_slug|replace('-', '_') }}.server import wsgi
 
     assert wsgi.application is not None
 
@@ -91,9 +91,9 @@ def test_wsgi_application():
 def test_asgi_application():
     os.environ.setdefault(
         "DJANGO_SETTINGS_MODULE",
-        "{{ cookiecutter.package_name }}.server.settings",
+        "{{ cookiecutter.project_slug|replace('-', '_') }}.server.settings",
     )
 
-    from {{ cookiecutter.package_name }}.server import asgi
+    from {{ cookiecutter.project_slug|replace('-', '_') }}.server import asgi
 
     assert asgi.application is not None

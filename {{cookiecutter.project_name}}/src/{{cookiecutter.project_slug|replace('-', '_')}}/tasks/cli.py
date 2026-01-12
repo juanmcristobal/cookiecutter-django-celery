@@ -13,10 +13,10 @@ def _has_app_arg(argv):
 def main():
     os.environ.setdefault(
         "DJANGO_SETTINGS_MODULE",
-        "{{ cookiecutter.package_name }}.server.settings",
+        "{{ cookiecutter.project_slug|replace('-', '_') }}.server.settings",
     )
     argv = sys.argv[1:]
     if not _has_app_arg(argv):
-        argv = ["-A", "{{ cookiecutter.package_name }}.tasks.celery_app"] + argv
+        argv = ["-A", "{{ cookiecutter.project_slug|replace('-', '_') }}.tasks.celery_app"] + argv
     sys.argv = ["celery"] + argv
     celery_main()

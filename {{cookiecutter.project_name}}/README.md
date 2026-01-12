@@ -1,6 +1,6 @@
 # {{ cookiecutter.project_name }}
 
-Minimal, production-minded Django + Celery backend with a single Python namespace: `{{ cookiecutter.package_name }}`.
+Minimal, production-minded Django + Celery backend with a single Python namespace: `{{ cookiecutter.project_slug|replace('-', '_') }}`.
 Requires Python {{ cookiecutter.python_version }}+.
 
 ## Quick Start (local)
@@ -18,7 +18,7 @@ Run web (WSGI):
 
 Run web (ASGI):
 ```bash
-uvicorn {{ cookiecutter.package_name }}.server.asgi:application --host 0.0.0.0 --port 8000
+uvicorn {{ cookiecutter.project_slug|replace('-', '_') }}.server.asgi:application --host 0.0.0.0 --port 8000
 ```
 
 Run worker and beat:
@@ -27,7 +27,7 @@ Run worker and beat:
 {{ cookiecutter.project_slug }}-celery beat -l info
 ```
 
-Celery Beat schedule is configured in `{{ cookiecutter.package_name }}.server.settings` via `CELERY_BEAT_SCHEDULE`.
+Celery Beat schedule is configured in `{{ cookiecutter.project_slug|replace('-', '_') }}.server.settings` via `CELERY_BEAT_SCHEDULE`.
 
 Health check:
 ```bash

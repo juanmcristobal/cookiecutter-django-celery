@@ -3,7 +3,7 @@ requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "{{ cookiecutter.distribution_name }}"
+name = "{{ cookiecutter.project_slug|replace('_', '-') }}"
 version = "{{ cookiecutter.version }}"
 description = "{{ cookiecutter.description }}"
 readme = "README.md"
@@ -17,9 +17,9 @@ dependencies = [
 ]
 
 [project.scripts]
-{{ cookiecutter.project_slug }}-manage = "{{ cookiecutter.package_name }}.manage_cli:main"
-{{ cookiecutter.project_slug }}-celery = "{{ cookiecutter.package_name }}.tasks.cli:main"
-{{ cookiecutter.project_slug }}-migrate = "{{ cookiecutter.package_name }}.migrate_cli:main"
+{{ cookiecutter.project_slug }}-manage = "{{ cookiecutter.project_slug|replace('-', '_') }}.manage_cli:main"
+{{ cookiecutter.project_slug }}-celery = "{{ cookiecutter.project_slug|replace('-', '_') }}.tasks.cli:main"
+{{ cookiecutter.project_slug }}-migrate = "{{ cookiecutter.project_slug|replace('-', '_') }}.migrate_cli:main"
 
 [project.optional-dependencies]
 server = ["gunicorn>=21.0", "uvicorn[standard]>=0.22"]
@@ -44,7 +44,7 @@ package-dir = {"" = "src"}
 where = ["src"]
 
 [tool.pytest.ini_options]
-DJANGO_SETTINGS_MODULE = "{{ cookiecutter.package_name }}.server.settings"
+DJANGO_SETTINGS_MODULE = "{{ cookiecutter.project_slug|replace('-', '_') }}.server.settings"
 python_files = ["test_*.py"]
 testpaths = ["tests"]
 
@@ -55,7 +55,7 @@ select = ["E", "F", "I", "B", "UP", "N", "W"]
 ignore = ["E501"]
 
 [tool.ruff.isort]
-known-first-party = ["{{ cookiecutter.package_name }}"]
+known-first-party = ["{{ cookiecutter.project_slug|replace('-', '_') }}"]
 
 [tool.black]
 line-length = 88
@@ -71,11 +71,11 @@ disallow_untyped_defs = false
 plugins = ["mypy_django_plugin.main"]
 
 [tool.django-stubs]
-django_settings_module = "{{ cookiecutter.package_name }}.server.settings"
+django_settings_module = "{{ cookiecutter.project_slug|replace('-', '_') }}.server.settings"
 
 [tool.coverage.run]
 branch = true
-source = ["{{ cookiecutter.package_name }}"]
+source = ["{{ cookiecutter.project_slug|replace('-', '_') }}"]
 omit = ["*/migrations/*", "*/tests/*"]
 
 [tool.coverage.report]

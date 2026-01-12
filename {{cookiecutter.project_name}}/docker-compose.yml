@@ -13,7 +13,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.dev
-    command: uvicorn {{ cookiecutter.package_name }}.server.asgi:application --host 0.0.0.0 --port 8000 --reload
+    command: uvicorn {{ cookiecutter.project_slug|replace('-', '_') }}.server.asgi:application --host 0.0.0.0 --port 8000 --reload
     environment:
       DJANGO_DEBUG: "1"
       DJANGO_ALLOWED_HOSTS: "localhost,127.0.0.1,0.0.0.0"
@@ -36,7 +36,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.dev
-    command: celery -A {{ cookiecutter.package_name }}.tasks.celery_app worker -l info
+    command: celery -A {{ cookiecutter.project_slug|replace('-', '_') }}.tasks.celery_app worker -l info
     environment:
       DJANGO_DEBUG: "1"
       CELERY_BROKER_URL: "redis://redis:6379/0"
@@ -51,7 +51,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.dev
-    command: celery -A {{ cookiecutter.package_name }}.tasks.celery_app beat -l info
+    command: celery -A {{ cookiecutter.project_slug|replace('-', '_') }}.tasks.celery_app beat -l info
     environment:
       DJANGO_DEBUG: "1"
       CELERY_BROKER_URL: "redis://redis:6379/0"

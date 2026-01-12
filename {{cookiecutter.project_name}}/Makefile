@@ -53,16 +53,16 @@ lint: format-check
 	$(PYTHON) -m flake8 $(SRC_DIR) $(TEST_DIR)
 
 test:
-	DJANGO_SETTINGS_MODULE={{ cookiecutter.package_name }}.server.settings \
+	DJANGO_SETTINGS_MODULE={{ cookiecutter.project_slug|replace('-', '_') }}.server.settings \
 	CELERY_TASK_ALWAYS_EAGER=1 \
 	CELERY_TASK_EAGER_PROPAGATES=1 \
 	$(PYTHON) -m pytest $(TEST_DIR)
 
 coverage:
-	DJANGO_SETTINGS_MODULE={{ cookiecutter.package_name }}.server.settings \
+	DJANGO_SETTINGS_MODULE={{ cookiecutter.project_slug|replace('-', '_') }}.server.settings \
 	CELERY_TASK_ALWAYS_EAGER=1 \
 	CELERY_TASK_EAGER_PROPAGATES=1 \
-	$(PYTHON) -m pytest --cov={{ cookiecutter.package_name }} --cov-report=term-missing --cov-fail-under=$(COVERAGE_MIN)
+	$(PYTHON) -m pytest --cov={{ cookiecutter.project_slug|replace('-', '_') }} --cov-report=term-missing --cov-fail-under=$(COVERAGE_MIN)
 
 tox:
 	$(PYTHON) -m tox

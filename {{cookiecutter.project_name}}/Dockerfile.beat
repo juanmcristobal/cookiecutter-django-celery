@@ -8,10 +8,10 @@ RUN python -m pip install --upgrade pip && \
 
 FROM python:{{ cookiecutter.python_version }}-slim
 WORKDIR /app
-ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 DJANGO_SETTINGS_MODULE={{ cookiecutter.package_name }}.server.settings
+ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 DJANGO_SETTINGS_MODULE={{ cookiecutter.project_slug|replace('-', '_') }}.server.settings
 RUN useradd --create-home --uid 10001 appuser
 COPY --from=builder /wheels /wheels
-RUN python -m pip install --no-cache-dir --no-index --find-links=/wheels {{ cookiecutter.distribution_name }}[tasks] && \
+RUN python -m pip install --no-cache-dir --no-index --find-links=/wheels {{ cookiecutter.project_slug|replace('_', '-') }}[tasks] && \
     rm -rf /wheels
 USER appuser
-CMD ["celery", "-A", "{{ cookiecutter.package_name }}.tasks.celery_app", "worker", "-l", "info"]
+CMD ["celery", "-A", "{{ cookiecutter.project_slug|replace('-', '_') }}.tasks.celery_app", "beat", "-l", "info"]

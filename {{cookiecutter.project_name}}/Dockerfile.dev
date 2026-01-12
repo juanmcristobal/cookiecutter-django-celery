@@ -1,6 +1,6 @@
 FROM python:{{ cookiecutter.python_version }}-slim
 WORKDIR /app
-ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 DJANGO_SETTINGS_MODULE={{ cookiecutter.package_name }}.server.settings
+ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 DJANGO_SETTINGS_MODULE={{ cookiecutter.project_slug|replace('-', '_') }}.server.settings
 COPY pyproject.toml README.md /app/
 COPY src /app/src
 COPY tests /app/tests
@@ -9,4 +9,4 @@ RUN python -m pip install --upgrade pip && \
 RUN useradd --create-home --uid 10001 appuser
 USER appuser
 EXPOSE 8000
-CMD ["uvicorn", "{{ cookiecutter.package_name }}.server.asgi:application", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+CMD ["uvicorn", "{{ cookiecutter.project_slug|replace('-', '_') }}.server.asgi:application", "--host", "0.0.0.0", "--port", "8000", "--reload"]

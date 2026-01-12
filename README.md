@@ -30,9 +30,9 @@ cookiecutter https://github.com/juanmcristobal/cookiecutter-django-celery
 ## Template variables
 
 - project_name: Human-friendly project name (e.g., "My Project").
-- project_slug: Lowercase slug for folders/URLs (e.g., "my_project").
-- package_name: Main Python package namespace (e.g., "my_project").
-- distribution_name: Distribution package name (e.g., for PyPI).
+- project_slug: Lowercase slug for folders/URLs and CLI names; defaults from `project_name`.
+- package_name: Python package namespace derived from `project_slug` (hyphens become underscores).
+- distribution_name: Distribution name derived from `project_slug` (underscores become hyphens).
 - version: Initial project version.
 - description: Short project description.
 - author_name: Author name.
